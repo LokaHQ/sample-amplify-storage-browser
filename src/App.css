@@ -9,3 +9,12 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.amplify-storage-browser__data-table {
+  border-radius: 2rem;
+}
+
+.amplify-storage-browser__title {
+  font-weight: bold;
+  font-family: monospace;
+}
