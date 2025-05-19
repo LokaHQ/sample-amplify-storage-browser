@@ -8,5 +8,10 @@ export const auth = defineAuth({
   loginWith: {
     email: true,
   },
-  groups: ['admin']
+  groups: ['patients', 'physicians', 'nurses', 'radiologists', 'admin'],
+  // MFA required for HIPAA compliance
+  multifactor: {
+    mode: 'REQUIRED',
+    sms: true,
+  },
 });
