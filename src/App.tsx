@@ -5,29 +5,12 @@ import {
 import '@aws-amplify/ui-react-storage/styles.css';
 import './App.css';
 import { Amplify } from 'aws-amplify';
-import { Authenticator, Button, Flex, View, Text, Tabs, Card } from '@aws-amplify/ui-react';
+import config from '../amplify_outputs.json';
+import { Button, Card, Flex, Tabs, Text, View } from '@aws-amplify/ui-react';
 import { useEffect, useState } from 'react';
 
-// Mock configuration for development
-const mockConfig = {
-  Auth: {
-    Cognito: {
-      userPoolId: 'us-east-1_XXXXXXXXX',
-      userPoolClientId: 'XXXXXXXXXXXXXXXXXXXXXXXXX',
-      identityPoolId: 'us-east-1:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',
-      allowGuestAccess: true,
-    },
-  },
-  Storage: {
-    S3: {
-      bucket: 'amplify-medical-records-XXXXXXXXXXXX',
-      region: 'us-east-1',
-    },
-  },
-};
-
 // Configure Amplify with mock config
-Amplify.configure(mockConfig);
+Amplify.configure(config);
 
 // Create StorageBrowser instance
 let storageBrowserInstance: ReturnType<typeof createStorageBrowser> | null = null;
@@ -134,7 +117,7 @@ function App() {
                 lastModified: file.lastModified,
                 size: file.size,
               };
-              
+
               if (file.key.includes('lab-results')) acc.labs.push(medicalFile);
               else if (file.key.includes('imaging')) acc.imaging.push(medicalFile);
               else if (file.key.includes('notes')) acc.notes.push(medicalFile);
@@ -196,70 +179,51 @@ function App() {
 
   return (
     <>
-      <Authenticator>
-        {({ signOut, user }) => {
-          return (
-            <>
-              <header className="header">
-                <Flex justifyContent="space-between" alignItems="center" padding="medium">
-                  <View>
-                    <Flex alignItems="center" gap="medium">
-                      {/* Logo SVG */}
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="#1877f2">
-                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
-                        <path
-                          fill="white"
-                          d="M12 5L6 8v6c0 3.5 2 6.5 6 7.5 4-1 6-4 6-7.5V8l-6-3z"
-                        />
-                        <path fill="#1877f2" d="M10 17l-4-4 1.4-1.4L10 14.2l5.6-5.6L17 10z" />
-                      </svg>
-                      <View>
-                        <h1>SecureHealth Portal</h1>
-                        <Text color="font.tertiary" fontSize="small">
-                          Welcome back, {user?.username}
-                        </Text>
-                      </View>
-                    </Flex>
-                  </View>
-                  <Button onClick={signOut}>Sign out</Button>
-                </Flex>
-              </header>
-
-              <View
-                backgroundColor="background.secondary"
-                minHeight="calc(100vh - 80px)"
-                padding="large"
-              >
-                <View maxWidth="1200px" margin="0 auto">
-                  <StorageBrowser
-                    displayText={{
-                      LocationsView: {
-                        title: 'Medical Records Management',
-                      },
-                    }}
-                  />
-
-                  <StorageBrowser.Provider>
-                    <PatientRecordsView />
-                  </StorageBrowser.Provider>
-                </View>
+      <header className="header">
+        <Flex justifyContent="space-between" alignItems="center" padding="medium">
+          <View>
+            <Flex alignItems="center" gap="medium">
+              {/* Logo SVG */}
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="#1877f2">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+                <path fill="white" d="M12 5L6 8v6c0 3.5 2 6.5 6 7.5 4-1 6-4 6-7.5V8l-6-3z" />
+                <path fill="#1877f2" d="M10 17l-4-4 1.4-1.4L10 14.2l5.6-5.6L17 10z" />
+              </svg>
+              <View>
+                <h1>SecureHealth Portal</h1>
               </View>
+            </Flex>
+          </View>
+        </Flex>
+      </header>
 
-              {/* HIPAA Compliance Notice */}
-              <View className="hipaa-notice">
-                <Flex alignItems="center" justifyContent="center" gap="small">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-                  </svg>
-                  <Text>
-                    All data is encrypted and stored in accordance with HIPAA compliance standards
-                  </Text>
-                </Flex>
-              </View>
-            </>
-          );
-        }}
-      </Authenticator>
+      <View backgroundColor="background.secondary" minHeight="calc(100vh - 80px)" padding="large">
+        <View maxWidth="1200px" margin="0 auto">
+          <StorageBrowser
+            displayText={{
+              LocationsView: {
+                title: 'Medical Records Management',
+              },
+            }}
+          />
+
+          <StorageBrowser.Provider>
+            <PatientRecordsView />
+          </StorageBrowser.Provider>
+        </View>
+      </View>
+
+      {/* HIPAA Compliance Notice */}
+      <View className="hipaa-notice">
+        <Flex alignItems="center" justifyContent="center" gap="small">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+          </svg>
+          <Text>
+            All data is encrypted and stored in accordance with HIPAA compliance standards
+          </Text>
+        </Flex>
+      </View>
     </>
   );
 }
