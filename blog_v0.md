@@ -3,13 +3,20 @@
 Amplify storage brings robust file handling features to both web and mobile applications by leveraging Amazon S3 under the hood. With easy-to-use APIs and pre-made UI elements, developers can create secure and scalable file storage experiences without needing to dive deep into the complexities of cloud infrastructure.
 
 ## What is the S3 storage browser
-
+   
 The storage browser is a UI component available through the Amplify UI library. This out-of-the-box interface allows users to upload, view, and manage files stored in your S3 bucket. In the following sections, we’ll walk through how to set it up, tailor it to your needs, and even create a custom interface from scratch if desired.
 
 ## Setting up the storage browser
 
 The quickest way to set up the storage browser is to use the [amplify storage browser template](https://github.com/aws-samples/sample-amplify-storage-browser) which creates S3 buckets for you. If you rather work with an existing bucket(s), there is also a [template](https://github.com/aws-samples/sample-amplify-storage-browser/tree/sample/amplify-auth-with-existing-bucket) that does exactly that. In the scope of this guide we will use the first [template](https://github.com/aws-samples/sample-amplify-storage-browser) that creates S3 buckets for us.
 To deploy this template, an AWS account with appropriate permissions is required.
+
+The template leverages:
+- **Amazon S3** for encrypted file storage
+- **Amazon Cognito** for user authentication
+- **AWS IAM** for granular access control
+- **React + Vite** for a responsive frontend
+
 
 ### Steps to deploy
 
@@ -34,13 +41,13 @@ To deploy this template, an AWS account with appropriate permissions is required
 
 There are multiple ways to customize the storage browser for better branding and user experience purposes:
 
-1. The simplest one is to override the [amplify ui theme](https://ui.docs.amplify.aws/react/theming#theme-object).
+- The simplest one is to override the [amplify ui theme](https://ui.docs.amplify.aws/react/theming#theme-object).
    - In addition to overriding theme, plain CSS can be used to adapt the style of the components.
    - All the design tokens defined in the Amplify theme are CSS variables that can be overridden.
-2. The storage browser is made of composable components which can be reordered and customized.
+- The storage browser is made of composable components which can be reordered and customized.
    - This can be achieved with the help of the [exposed hooks](https://ui.docs.amplify.aws/react/connected-components/storage/storage-browser#view-reference) that have access to the storage browser's internal state and event handlers.
    - (e.g., Hide the upload button for users that have only read access)
-3. Custom-made storage browser from scratch if prebuilt components don't fit your requirements.
+- Custom-made storage browser from scratch if prebuilt components don't fit your requirements.
    - While the storage browser component is powerful, sometimes you need complete control over the UI/UX or require features not offered out of the box. In such cases, you can use the underlying [Amplify storage module directly](https://docs.amplify.aws/javascript/build-a-backend/storage/reference/).
 
 ### Plain CSS customization
@@ -95,8 +102,8 @@ By using `useView('Locations')` we can get access to the internal state of the s
 
 ### Without the Amplify UI library
 
-Maybe you already are using some kind of component library, and you just don't want to add another dependency. In that case building something from scratch is a valid approach. Let's just say we want to retrieve the list of files in a bucket folder and display it.
-The Amplify storage module offers these [API endpoints](https://docs.amplify.aws/javascript/build-a-backend/storage/reference/). In this case we need just the list endpoint.
+Maybe you already are using some kind of component library, and you just don't want to add another dependency. In that case, building something from scratch is a valid approach. Let's just say we want to build a simple medical file system that categorizes some files.
+The Amplify storage module offers these [API endpoints](https://docs.amplify.aws/javascript/build-a-backend/storage/reference/). In this case, we need just the list endpoint.
 
 ```javascript
 function LocationsViewCustom() {
